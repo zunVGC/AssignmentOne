@@ -4,170 +4,140 @@ using System.Collections.Generic;
 
 namespace CommandPattern
 {
-    //The parent class
     public abstract class Command
     {
-        //How far should the box move when we press a button
-        protected float moveDistance = 1f;
+        // Execute functions and save it to command
+        public abstract void Execute(Transform myObj, Command command);
 
-        //Move and maybe save command
-        public abstract void Execute(Transform boxTrans, Command command);
+        // undo function for object
+        public virtual void Undo(Transform myObj) { }
 
-        //Undo an old command
-        public virtual void Undo(Transform boxTrans) { }
-
-        //Move the box
-        public virtual void Move(Transform boxTrans) { }
+        // move function for object
+        public virtual void Move(Transform myObj) { }
     }
 
-
-    //
-    // Child classes
-    //
-
-    public class MoveForward : Command
+    public class MoveFront : Command
     {
-        //Called when we press a key
-        public override void Execute(Transform boxTrans, Command command)
+        // call function for object move front and save for command
+        public override void Execute(Transform myObj, Command command)
         {
-            //Move the box
-            Move(boxTrans);
+            // move object
+            Move(myObj);
 
-            //Save the command
-            InputHandler.oldCommands.Add(command);
+            // save this command for undo function
+            InputHandler.preCommand.Add(command);
         }
 
-        //Undo an old command
-        public override void Undo(Transform boxTrans)
+        // go back to last position for undo function, when move 1f, it save for go back 1f
+        public override void Undo(Transform myObj)
         {
-            boxTrans.Translate(-boxTrans.forward * moveDistance);
+            myObj.Translate(-myObj.forward * 1f);
         }
 
-        //Move the box
-        public override void Move(Transform boxTrans)
+        // move object for 1f
+        public override void Move(Transform myObj)
         {
-            boxTrans.Translate(boxTrans.forward * moveDistance);
+            myObj.Translate(myObj.forward * 1f);
         }
     }
 
 
-    public class MoveReverse : Command
+    public class MoveBack : Command
     {
-        //Called when we press a key
-        public override void Execute(Transform boxTrans, Command command)
+        // call function for object move back and save for command
+        public override void Execute(Transform myObj, Command command)
         {
-            //Move the box
-            Move(boxTrans);
+            // move object
+            Move(myObj);
 
-            //Save the command
-            InputHandler.oldCommands.Add(command);
+            // save this command for undo function
+            InputHandler.preCommand.Add(command);
         }
 
-        //Undo an old command
-        public override void Undo(Transform boxTrans)
+        // go back to last position for undo function, when move 1f, it save for go back 1f
+        public override void Undo(Transform myObj)
         {
-            boxTrans.Translate(boxTrans.forward * moveDistance);
+            myObj.Translate(myObj.forward * 1f);
         }
 
-        //Move the box
-        public override void Move(Transform boxTrans)
+        // move object for 1f
+        public override void Move(Transform myObj)
         {
-            boxTrans.Translate(-boxTrans.forward * moveDistance);
+            myObj.Translate(-myObj.forward * 1f);
         }
     }
-
 
     public class MoveLeft : Command
     {
-        //Called when we press a key
-        public override void Execute(Transform boxTrans, Command command)
+        // call function for object move left and save for command
+        public override void Execute(Transform myObj, Command command)
         {
-            //Move the box
-            Move(boxTrans);
+            // move object
+            Move(myObj);
 
-            //Save the command
-            InputHandler.oldCommands.Add(command);
+            // save this command for undo function
+            InputHandler.preCommand.Add(command);
         }
 
-        //Undo an old command
-        public override void Undo(Transform boxTrans)
+        // go back to last position for undo function, when move 1f, it save for go back 1f
+        public override void Undo(Transform myObj)
         {
-            boxTrans.Translate(boxTrans.right * moveDistance);
+            myObj.Translate(myObj.right * 1f);
         }
 
-        //Move the box
-        public override void Move(Transform boxTrans)
+        // move object for 1f
+        public override void Move(Transform myObj)
         {
-            boxTrans.Translate(-boxTrans.right * moveDistance);
+            myObj.Translate(-myObj.right * 1f);
         }
     }
 
 
     public class MoveRight : Command
     {
-        //Called when we press a key
-        public override void Execute(Transform boxTrans, Command command)
+        // call function for object move right and save for command
+        public override void Execute(Transform myObj, Command command)
         {
-            //Move the box
-            Move(boxTrans);
+            // move object
+            Move(myObj);
 
-            //Save the command
-            InputHandler.oldCommands.Add(command);
+            // save this command for undo function
+            InputHandler.preCommand.Add(command);
         }
 
-        //Undo an old command
-        public override void Undo(Transform boxTrans)
+        // go back to last position for undo function, when move 1f, it save for go back 1f
+        public override void Undo(Transform myObj)
         {
-            boxTrans.Translate(-boxTrans.right * moveDistance);
+            myObj.Translate(-myObj.right * 1f);
         }
 
-        //Move the box
-        public override void Move(Transform boxTrans)
+        // move object for 1f
+        public override void Move(Transform myObj)
         {
-            boxTrans.Translate(boxTrans.right * moveDistance);
-        }
-    }
-
-
-    //For keys with no binding
-    public class DoNothing : Command
-    {
-        //Called when we press a key
-        public override void Execute(Transform boxTrans, Command command)
-        {
-            //Nothing will happen if we press this key
+            myObj.Translate(myObj.right * 1f);
         }
     }
 
-
-    //Undo one command
-    public class UndoCommand : Command
+    // undo function
+    public class Undo : Command
     {
-        //Called when we press a key
-        public override void Execute(Transform boxTrans, Command command)
+        // press key for calling function
+        public override void Execute(Transform myObj, Command command)
         {
-            List<Command> oldCommands = InputHandler.oldCommands;
+            // create and save commands list for each time press key to call function for undo
+            List<Command> preCommand = InputHandler.preCommand;
 
-            if (oldCommands.Count > 0)
+            if (preCommand.Count > 0)
             {
-                Command latestCommand = oldCommands[oldCommands.Count - 1];
+                // last command is the end of command list - 1 because last command should go back previous command
+                Command latestCommand = preCommand[preCommand.Count - 1];
 
-                //Move the box with this command
-                latestCommand.Undo(boxTrans);
+                // object goes to last command
+                latestCommand.Undo(myObj);
 
-                //Remove the command from the list
-                oldCommands.RemoveAt(oldCommands.Count - 1);
+                // after go back previous command and remove last command in the end of list
+                preCommand.RemoveAt(preCommand.Count - 1);
             }
-        }
-    }
-
-
-    //Replay all commands
-    public class ReplayCommand : Command
-    {
-        public override void Execute(Transform boxTrans, Command command)
-        {
-            InputHandler.shouldStartReplay = true;
         }
     }
 }
