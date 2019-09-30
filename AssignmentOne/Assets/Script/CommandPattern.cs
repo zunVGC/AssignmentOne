@@ -4,6 +4,59 @@ using System.Collections.Generic;
 
 namespace CommandPattern
 {
+    public class CommandPattern : MonoBehaviour
+    {
+        // Object created for control
+        public Transform myObj;
+        // keyboard functions
+        private Command W, S, A, D, C;
+        // save all commands for undo
+        public static List<Command> preCommand = new List<Command>();
+        // object initialization position
+        private Vector3 myObjInitPos;
+
+        void Start()
+        {
+            // keyboard command functions
+            W = new MoveFront();
+            S = new MoveBack();
+            A = new MoveLeft();
+            D = new MoveRight();
+            C = new Undo();
+            myObjInitPos = myObj.position;
+        }
+
+        void Update()
+        {
+            HandleInput();
+        }
+
+        // press key for each functions
+        public void HandleInput()
+        {
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                A.Execute(myObj, A);
+            }
+            else if (Input.GetKeyDown(KeyCode.D))
+            {
+                D.Execute(myObj, D);
+            }
+            else if (Input.GetKeyDown(KeyCode.S))
+            {
+                S.Execute(myObj, S);
+            }
+            else if (Input.GetKeyDown(KeyCode.W))
+            {
+                W.Execute(myObj, W);
+            }
+            else if (Input.GetKeyDown(KeyCode.C))
+            {
+                C.Execute(myObj, C);
+            }
+        }
+    }
+
     public abstract class Command
     {
         // Execute functions and save it to command
@@ -25,7 +78,7 @@ namespace CommandPattern
             Move(myObj);
 
             // save this command for undo function
-            InputHandler.preCommand.Add(command);
+            CommandPattern.preCommand.Add(command);
         }
 
         // go back to last position for undo function, when move 1f, it save for go back 1f
@@ -51,7 +104,7 @@ namespace CommandPattern
             Move(myObj);
 
             // save this command for undo function
-            InputHandler.preCommand.Add(command);
+            CommandPattern.preCommand.Add(command);
         }
 
         // go back to last position for undo function, when move 1f, it save for go back 1f
@@ -76,7 +129,7 @@ namespace CommandPattern
             Move(myObj);
 
             // save this command for undo function
-            InputHandler.preCommand.Add(command);
+            CommandPattern.preCommand.Add(command);
         }
 
         // go back to last position for undo function, when move 1f, it save for go back 1f
@@ -92,7 +145,6 @@ namespace CommandPattern
         }
     }
 
-
     public class MoveRight : Command
     {
         // call function for object move right and save for command
@@ -102,7 +154,7 @@ namespace CommandPattern
             Move(myObj);
 
             // save this command for undo function
-            InputHandler.preCommand.Add(command);
+            CommandPattern.preCommand.Add(command);
         }
 
         // go back to last position for undo function, when move 1f, it save for go back 1f
@@ -125,7 +177,7 @@ namespace CommandPattern
         public override void Execute(Transform myObj, Command command)
         {
             // create and save commands list for each time press key to call function for undo
-            List<Command> preCommand = InputHandler.preCommand;
+            List<Command> preCommand = CommandPattern.preCommand;
 
             if (preCommand.Count > 0)
             {
