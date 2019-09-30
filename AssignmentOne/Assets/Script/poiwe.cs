@@ -13,7 +13,7 @@ public class poiwe : MonoBehaviour
     public string poiName { get { return _poi; } }
     private void OnTriggerEnter(Collider other)
     {
-        if (Onpoie != null)
+        Debug.Log("123");
             Onpoie(this._poi);
     }
 }
