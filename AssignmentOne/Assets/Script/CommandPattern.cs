@@ -84,13 +84,13 @@ namespace CommandPattern
         // go back to last position for undo function, when move 1f, it save for go back 1f
         public override void Undo(Transform myObj)
         {
-            myObj.Translate(-myObj.forward * 1f);
+            myObj.Translate(-myObj.forward * 0.5f);
         }
 
-        // move object for 1f
+        // move object for 0.5f
         public override void Move(Transform myObj)
         {
-            myObj.Translate(myObj.forward * 1f);
+            myObj.Translate(myObj.forward * 0.5f);
         }
     }
 
@@ -107,16 +107,16 @@ namespace CommandPattern
             CommandPattern.preCommand.Add(command);
         }
 
-        // go back to last position for undo function, when move 1f, it save for go back 1f
+        // go back to last position for undo function, when move 0.5f, it save for go back 0.5f
         public override void Undo(Transform myObj)
         {
-            myObj.Translate(myObj.forward * 1f);
+            myObj.Translate(myObj.forward * 0.5f);
         }
 
-        // move object for 1f
+        // move object for 0.5f
         public override void Move(Transform myObj)
         {
-            myObj.Translate(-myObj.forward * 1f);
+            myObj.Translate(-myObj.forward * 0.5f);
         }
     }
 
@@ -132,16 +132,16 @@ namespace CommandPattern
             CommandPattern.preCommand.Add(command);
         }
 
-        // go back to last position for undo function, when move 1f, it save for go back 1f
+        // go back to last position for undo function, when move 0.5f, it save for go back 0.5f
         public override void Undo(Transform myObj)
         {
-            myObj.Translate(myObj.right * 1f);
+            myObj.Translate(myObj.right * 0.5f);
         }
 
-        // move object for 1f
+        // move object for 0.5f
         public override void Move(Transform myObj)
         {
-            myObj.Translate(-myObj.right * 1f);
+            myObj.Translate(-myObj.right * 0.5f);
         }
     }
 
@@ -157,16 +157,16 @@ namespace CommandPattern
             CommandPattern.preCommand.Add(command);
         }
 
-        // go back to last position for undo function, when move 1f, it save for go back 1f
+        // go back to last position for undo function, when move 0.5f, it save for go back 0.5f
         public override void Undo(Transform myObj)
         {
-            myObj.Translate(-myObj.right * 1f);
+            myObj.Translate(-myObj.right * 0.5f);
         }
 
-        // move object for 1f
+        // move object for 0.5f
         public override void Move(Transform myObj)
         {
-            myObj.Translate(myObj.right * 1f);
+            myObj.Translate(myObj.right * 0.5f);
         }
     }
 
