@@ -16,7 +16,7 @@ public class spawner : MonoBehaviour
         }
     }
 
-    public void ss()
+    public void SpawnBall()
     {
         Instantiate(spawnee, spawnPos.position, spawnPos.rotation);
     }
